@@ -27,6 +27,12 @@ public:
     void stop(); // Method to stop the vehicle
 
     void honk() const; // Method to honk the horn
+
+    bool isDuplicateVehicle(const std::string& plate) const; // Check for duplicate vehicle
+
+    void saveVehicles() const; // Save vehicle data
+
+    void loadVehicles(); // Load vehicle data
 };
 
 #endif // VEHICLE_H
