@@ -26,7 +26,7 @@ public:
     std::vector<Reservation> reservations; // List of reservations for the sailing
     date departureDate; // Departure date of the sailing
     float HRL; // High ceiling remaining lane space
-    float LRL; // Low ceiling remaining lane space
+    float LRL; // Low ceiling remaining lane space  
 
     // Methods for sailing management
     Sailing(); // Default constructor
@@ -34,6 +34,9 @@ public:
     ~Sailing(); // Destructor
     void viewSailingDetails() const; // Method to view sailing details
     void checkAvailability() const; // Method to check availability of the sailing
+    void getReservation(int reservationID) const; // Method to get a reservation by ID
+    void load(); // Method to load sailings from a file
+    void save() const; // Method to save sailings to a file
 };
 
 #endif // SAILING_H

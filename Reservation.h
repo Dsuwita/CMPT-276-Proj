@@ -27,6 +27,10 @@ public:
     bool isAlreadyCheckedIn() const; // Method to check if vehicle has already boarded
 
     bool checkAvailability(int vehicleID, int sailingID) const; // Method to check if vehicle is available for a sailing
+
+    void load(); // Method to load reservations from a file 
+
+    void save() const; // Method to save reservations to a file
 };
 
 #endif // RESERVATION_H

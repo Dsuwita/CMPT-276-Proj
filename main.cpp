@@ -1,9 +1,14 @@
 #include <iostream>
 
+#include "Sailing.h"
+#include "Reservation.h"
+#include "Vessel.h"
+#include "Vehicle.h"
+
 // Function prototypes (defined elsewhere)
-void startup();
-void runUserInterface();
-void shutdown();
+void startup(){}
+void runUserInterface(){}
+void shutdown(){}
 
 int main() {
     std::cout << "Starting system...\n";
