@@ -5,7 +5,8 @@
  *              persisting vessel data to file.
  * Author:      Team 21
  *
- * Version History:
+ * Version History:'
+ * *  v1.0 (2025-07-24) — initial implementation
  */
 
 #include "Vessel.h"        
@@ -17,13 +18,6 @@
 #include <fcntl.h>          // for open()
 
 static constexpr int NAME_SIZE = 100;
-
-struct VesselRecord {
-    int vesselID;
-    char vesselName[NAME_SIZE];
-    float HCLL;  // High Ceiling Remaining Lane Length
-    float LCLL;  // Low Ceiling Remaining Lane Length
-};
 
 static std::fstream vesselFile;
 static bool      vesselFileOpen = false;

@@ -5,6 +5,7 @@
  * Author:      Team 21
  *
  * Version History:
+ * *  v1.0 (2025-07-24) — initial implementation
  */
 
 #include "Reservation.h"
@@ -62,8 +63,7 @@ bool Reservation::matchesID(const char* id) const {
     return std::strncmp(reservationID, id, sizeof(reservationID)) == 0;
 }
 
-
-
+// ReservationRecord structure for file I/O
 struct ReservationRecord {
     char reservationID[RES_ID_LEN];
     char phoneNumber[PHONE_SIZE];
@@ -76,6 +76,7 @@ struct ReservationRecord {
     bool isBoarded;
 };
 
+// Save all reservations to file
 void Reservation::saveAll(const std::vector<Vessel>& vessels) {
     std::ofstream out("reservations.dat", std::ios::binary | std::ios::trunc);
     if (!out) return;
@@ -102,6 +103,7 @@ void Reservation::saveAll(const std::vector<Vessel>& vessels) {
     }
 }
 
+// Load all reservations from file
 void Reservation::loadAll(std::vector<Vessel>& vessels) {
     std::ifstream in("reservations.dat", std::ios::binary);
     if (!in) return;

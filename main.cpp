@@ -6,7 +6,7 @@
  * Author:      Team 21
  *
  * Version History:
- *
+ * *  v1.0 (2025-07-24) — initial implementation
  */
 
 #include <iostream>

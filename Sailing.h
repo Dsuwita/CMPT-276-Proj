@@ -19,6 +19,14 @@ struct date {
     date(int d, int m, int y, int h) : day(d), month(m), year(y), hour(h) {}
 };
 
+struct SailingRecord {
+    char sailingID[SAILING_ID_LEN];
+    int vesselID;
+    int day, month, year, hour;
+    float HRL;
+    float LRL;
+};
+
 class Sailing {
 public:
     char sailingID[SAILING_ID_LEN];

@@ -7,6 +7,13 @@
 #include <string>
 #include <fstream>
 
+struct VesselRecord {
+    int vesselID;
+    char vesselName[NAME_SIZE];
+    float HCLL;  // High Ceiling Remaining Lane Length
+    float LCLL;  // Low Ceiling Remaining Lane Length
+};
+
 class Vessel {
 public:
     int vesselID;

@@ -1,3 +1,12 @@
+/*
+ * File:        Reservation.cpp
+ * Description: Implements the Reservation module. A Reservation stores user contact info,
+ *              a linked Vehicle object, and reservation metadata. Managed by the Sailing class.
+ * Author:      Team 21
+ *
+ * Version History:
+ */
+
 #include "Sailing.h"
 #include <iostream>
 #include <fstream>
