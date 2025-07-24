@@ -2,31 +2,34 @@
 #define RESERVATION_H
 
 #include "Vehicle.h"
+#include <fstream>
+#include <cstring>
 
 class Reservation {
 public:
-    // Attributes for reservation details
-    int reservationID; // Unique identifier for the reservation
-    Vehicle vehicle; // Vehicle associated with the reservation
-    int phoneNumber; // Phone number of the person making the reservation
-    bool isBoarded=false; // Flag to indicate if the vehicle is boarded
+    char reservationID[13];     // e.g. "R00000000001" — 12 chars + null
+    Vehicle vehicle;            // embedded, must also be binary-safe
+    char phoneNumber[15];       // store as char array to preserve formatting (e.g. "6041234567")
+    bool isBoarded;             // boarding status
 
-    // Methods for reservation management
-    Reservation(); // Default constructor
+    // Default constructor
+    Reservation();
 
-    ~Reservation(); // Destructor
+    // Parameterized constructor
+    Reservation(const char* id, const Vehicle& veh, const char* phone);
 
-    void viewReservation() const; // Method to view reservation details
+    // View details
+    void viewReservation() const;
+    void checkInReservation();
+    bool isAlreadyCheckedIn() const;
 
-    void checkInReservation(); // Method to check in a reservation
+    // Binary I/O
+    void writeToFile(std::ofstream& out) const;
+    void readFromFile(std::ifstream& in);
 
-    bool isAlreadyCheckedIn() const; // Method to check if vehicle has already boarded
+    // Utility
+    bool matchesID(const char* id) const;
 
-    bool checkAvailability(int vehicleID, int sailingID) const; // Method to check if vehicle is available for a sailing
-
-    void load(); // Method to load reservations from a file 
-
-    void save() const; // Method to save reservations to a file
 };
 
 #endif // RESERVATION_H

@@ -1,44 +1,45 @@
 #ifndef SAILING_H
 #define SAILING_H
 
-#include <vector>
 #include "Reservation.h"
+
+const int MAX_RESERVATIONS = 100;
+
 struct date {
-    int day; // Day of the month
-    int month; // Month of the year
-    int year; // Year
-    int hour; // Hour of the day (24-hour format)
+    int day;
+    int month;
+    int year;
+    int hour;
 
-    // Default constructor (empty date)
     date() : day(0), month(0), year(0), hour(0) {}
-
-    // Parameterized constructor
     date(int d, int m, int y, int h) : day(d), month(m), year(y), hour(h) {}
-
-    // destructor
-    ~date() {}
 };
 
 class Sailing {
 public:
-    // Attributes for sailing details
-    int sailingID; // Unique identifier for the sailing
-    std::vector<Reservation> reservations; // List of reservations for the sailing
-    date departureDate; // Departure date of the sailing
-    float HRL; // High ceiling remaining lane space
-    float LRL; // Low ceiling remaining lane space  
+    int sailingID;
+    date departureDate;
+    int vesselID;  // ID of the vessel this sailing belongs to
+    float HRL;  // High-ceiling remaining lane length
+    float LRL;  // Low-ceiling remaining lane length
 
-    // Methods for sailing management
-    Sailing(); // Default constructor
-    Sailing(int id, int vid, const date& depDate, float hrl, float lrl); // Parameterized constructor
-    ~Sailing(); // Destructor
-    void viewSailingDetails() const; // Method to view sailing details
-    void checkAvailability() const; // Method to check availability of the sailing
-    void makeReservation(const Reservation& res); // Method to make a reservation
-    void cancelReservation(); // Method to cancel a reservation
-    void getReservation(int reservationID) const; // Method to get a reservation by ID
-    void load(); // Method to load sailings from a file
-    void save() const; // Method to save sailings to a file
+    Reservation reservations[MAX_RESERVATIONS];
+    int reservationCount;  // how many reservations are stored
+
+    // Constructors
+    Sailing();
+    Sailing(int id, const date& depDate, float hrl, float lrl);
+
+    // Methods
+    void viewSailingDetails() const;
+    void checkAvailability() const;
+    bool makeReservation(const Reservation& res);
+    bool cancelReservation(const char* reservationID);
+    char* generateReservationID() const;    
+    const Reservation* getReservation(const char* reservationID) const;
+
+    void writeToFile(std::ofstream& out) const;
+    void readFromFile(std::ifstream& in);
 };
 
 #endif // SAILING_H

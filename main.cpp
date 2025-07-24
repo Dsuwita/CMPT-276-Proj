@@ -35,9 +35,29 @@ void printMenu() {
     std::cout << "4. Vehicle Check-In\n";
     std::cout << "5. View Sailing Report\n";
     std::cout << "6. View Sailing Vacancy\n";
+    std::cout << "7. Check In Vehicle\n";
     std::cout << "0. Exit\n\n\n";
     std::cout << "Please select an option: ";
 }
+
+void inputVehicle(Vehicle& vehicle) {
+    std::cout << "Enter license plate (max 9 characters): ";
+    std::cin >> vehicle.licensePlate;
+    std::cout << "Enter vehicle length: ";
+    std::cin >> vehicle.length;
+    std::cout << "Enter vehicle height: ";
+    std::cin >> vehicle.height;
+    std::cout << "Enter vehicle width: ";
+    std::cin >> vehicle.width;
+    std::cout << "Is this a special vehicle? (1 for yes, 0 for no): ";
+    std::cin >> vehicle.isSpecial;
+
+    int type;
+    std::cout << "Enter vehicle type (0 = REGULAR, 1 = OVERSIZE_LOW, 2 = OVERSIZE_HIGH): ";
+    std::cin >> type;
+    vehicle.type = static_cast<Vehicle::VehicleType>(type);
+}
+
 
 void createVessel(){
     int id;
@@ -117,53 +137,60 @@ void createSailing(){
     std::cin.get(); // Wait for user to press Enter
 }
 
-void makeReservation(){
-    int reservationID, phoneNumber, vehicleID, sailingID;
-    Vehicle vehicle; // Assume Vehicle has a method to input details
-    Reservation newReservation;
+void makeReservation() {
+    char reservationID[13];
+    int phoneNumber, sailingID;
+    Vehicle vehicle;
 
-    std::cout << "Enter Reservation ID: ";
+    std::cout << "Enter Reservation ID (max 12 characters): ";
     std::cin >> reservationID;
+    reservationID[12] = '\0'; // Ensure null-termination
+
     std::cout << "Enter Phone Number: ";
     std::cin >> phoneNumber;
-    std::cout << "Enter Vehicle ID: ";
-    std::cin >> vehicleID;
+
     std::cout << "Enter Sailing ID: ";
     std::cin >> sailingID;
 
-    // Set the reservation details
-    newReservation.reservationID = reservationID;
+    // Use vehicle input method
+    std::cout << "Enter Vehicle Details:\n";
+    vehicle.input(); // Assumes input() handles all required attributes
+
+    // Set reservation fields
+    Reservation newReservation;
+    std::strncpy(newReservation.reservationID, reservationID, 12);
+    newReservation.reservationID[12] = '\0';
     newReservation.phoneNumber = phoneNumber;
-    newReservation.vehicle = vehicle; // Assume vehicle details are set
+    newReservation.vehicle = vehicle;
+    newReservation.isBoarded = false;
 
-    // Find the sailing and add the reservation
-    auto it = std::find_if(vessels.begin(), vessels.end(), [sailingID](const Vessel& v) {
-        return std::any_of(v.sailings.begin(), v.sailings.end(), [sailingID](const Sailing& s) {
-            return s.sailingID == sailingID;
-        });
-    });
-
-    if (it != vessels.end()) {
-        for (auto& sailing : it->sailings) {
+    // Search for the sailing and make the reservation
+    bool found = false;
+    for (auto& vessel : vessels) {
+        for (auto& sailing : vessel.sailings) {
             if (sailing.sailingID == sailingID) {
-                if (newReservation.checkAvailability(vehicleID, sailingID)) {
+                found = true;
+                if (newReservation.checkAvailability(0, sailingID)) {
                     sailing.makeReservation(newReservation);
-                    std::cout << "Reservation made successfully!\n";
+                    newReservation.save(); // Save to file if binary method is implemented
                 } else {
                     std::cout << "Vehicle not available for this sailing.\n";
                 }
-                return;
+                break;
             }
         }
+        if (found) break;
+    }
+
+    if (!found) {
         std::cout << "Sailing with ID " << sailingID << " not found.\n";
-    } else {
-        std::cout << "Vessel with ID not found.\n";
     }
 
     std::cout << "Press Enter to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::cin.get(); // Wait for user to press Enter
+    std::cin.get();
 }
+
 
 void cancelReservation(){
     int reservationID, sailingID;
@@ -256,6 +283,27 @@ void viewSailingVacancy(){
     std::cin.get(); // Wait for user to press Enter
 }
 
+// Function to check in a vehicle
+void checkInVehicle() {
+    char reservationID[13];
+    std::cout << "Enter Reservation ID to check-in: ";
+    std::cin >> reservationID;
+
+    for (auto& vessel : vessels) {
+        for (auto& sailing : vessel.sailings) {
+            for (auto& res : sailing.reservations) {
+                if (std::strncmp(res.reservationID, reservationID, 13) == 0) {
+                    res.checkInReservation();
+                    return;
+                }
+            }
+        }
+    }
+
+    std::cout << "Reservation not found.\n";
+}
+
+
 // Function to run the user interface
 bool runUserInterface(){
     printMenu();
@@ -291,9 +339,7 @@ bool runUserInterface(){
             viewSailingVacancy();
             break;
         case 7:
-            for(int i = 0; i < vessels.size(); ++i) {
-                std::cout << "Vessel ID: " << vessels[i].vesselID << ", Name: " << vessels[i].vesselName << "\n";
-            }
+            checkInVehicle();
             break;
         case 0:
             std::cout << "Exiting the system...\n";

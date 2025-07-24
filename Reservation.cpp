@@ -7,14 +7,26 @@
  * Version History:
  */
 
-
 #include "Reservation.h"
 #include <iostream>
 #include <fstream>
+#include <cstring>
 
 // Default constructor
-Reservation::Reservation()
-    : reservationID(0), vehicle(), phoneNumber(0), isBoarded(false) {}
+Reservation::Reservation() {
+    std::memset(reservationID, 0, sizeof(reservationID));
+    std::memset(phoneNumber, 0, sizeof(phoneNumber));
+    isBoarded = false;
+}
+
+// Parameterized constructor
+Reservation::Reservation(const char* id, const Vehicle& veh, const char* phone)
+    : vehicle(veh), isBoarded(false) {
+    std::strncpy(reservationID, id, sizeof(reservationID) - 1);
+    reservationID[sizeof(reservationID) - 1] = '\0';
+    std::strncpy(phoneNumber, phone, sizeof(phoneNumber) - 1);
+    phoneNumber[sizeof(phoneNumber) - 1] = '\0';
+}
 
 // Destructor
 Reservation::~Reservation() {}
@@ -24,7 +36,7 @@ void Reservation::viewReservation() const {
     std::cout << "Reservation ID: " << reservationID << "\n";
     std::cout << "Phone Number: " << phoneNumber << "\n";
     std::cout << "Boarded: " << (isBoarded ? "Yes" : "No") << "\n";
-    // You may want to print vehicle details here
+    vehicle.viewVehicle(); 
 }
 
 // Check in reservation
@@ -42,27 +54,17 @@ bool Reservation::isAlreadyCheckedIn() const {
     return isBoarded;
 }
 
-// Check availability (placeholder)
-bool Reservation::checkAvailability(int vehicleID, int sailingID) const {
-    // Implement logic to check if vehicle is available for the sailing
-    std::cout << "Checking availability for vehicle " << vehicleID << " on sailing " << sailingID << "\n";
-    return true; // Placeholder
+// Binary file write
+void Reservation::writeToFile(std::ofstream& out) const {
+    out.write(reinterpret_cast<const char*>(this), sizeof(Reservation));
 }
 
-// Load reservations from file (placeholder)
-void Reservation::load() {
-    std::ifstream infile("reservations.txt");
-    if (infile.is_open()) {
-        // Implement file reading logic
-        infile.close();
-    }
+// Binary file read
+void Reservation::readFromFile(std::ifstream& in) {
+    in.read(reinterpret_cast<char*>(this), sizeof(Reservation));
 }
 
-// Save reservation to file (placeholder)
-void Reservation::save() const {
-    std::ofstream outfile("reservations.txt", std::ios::app);
-    if (outfile.is_open()) {
-        // Implement file writing logic
-        outfile.close();
-    }
+// Match reservation ID (utility method)
+bool Reservation::matchesID(const char* id) const {
+    return std::strncmp(reservationID, id, sizeof(reservationID)) == 0;
 }

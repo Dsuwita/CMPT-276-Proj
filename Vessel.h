@@ -3,32 +3,31 @@
 
 #include "Sailing.h"
 #include <vector>
-#include <string>
+#include <cstring>
 
 class Vessel {
 public:
-    int vesselID; // Unique identifier for the vessel
-    std::string vesselName; // Name of the vessel
-    float HCLL; // High ceiling lane length
-    float LCLL; // Low ceiling lane length
-    std::vector<Sailing> sailings; // List of sailings associated with the vessel
+    int vesselID;                 // Unique identifier
+    char vesselName[32];          // Fixed-length name
+    float HCLL;                   // High ceiling lane length
+    float LCLL;                   // Low ceiling lane length
 
-    // Methods for vessel management
-    Vessel(); // Default constructor
+    std::vector<Sailing> sailings; // This is kept in memory; NOT written directly to binary
 
-    Vessel(int id, const std::string& name, float hcll, float lcll); // Parameterized constructor
+    // Constructors
+    Vessel();  // Default
+    Vessel(int id, const std::string& name, float hcll, float lcll);
 
-    ~Vessel(); // Destructor
+    // Destructor
+    ~Vessel();
 
-    void addSailing(const Sailing& sailing); // Method to add a sailing
+    // Methods
+    void addSailing(const Sailing& sailing);
+    void removeSailing(const Sailing& sailing);
+    void viewVesselDetails() const;
 
-    void removeSailing(const Sailing& sailing); // Method to remove a sailing
-
-    void viewVesselDetails() const; // Method to view vessel details
-
-    void load(); // Method to load vessels from a file
-
-    void save() const; // Method to save vessels to a file
+    void load(std::ifstream& file);      // Load from binary file
+    void save(std::ofstream& file) const; // Save to binary file
 };
 
 #endif // VESSEL_H

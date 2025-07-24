@@ -1,38 +1,36 @@
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
-#include <string>
+#include <cstring>
+#include <fstream>
 
 class Vehicle {
 public:
-    // Attributes for vehicle details
-    std::string licensePlate; // Vehicle's license plate
-    float length; // Length of the vehicle in meters
-    float height; // Height of the vehicle in meters
-    float width; // Width of the vehicle in meters
-    bool isSpecial; // Flag to indicate if the vehicle is special 
-    enum class VehicleType { 
+    // Constants
+    static const int LICENSE_PLATE_LEN = 10;
+
+    // Fixed-length attributes for binary file compatibility
+    char licensePlate[LICENSE_PLATE_LEN]; // Fixed-length license plate
+    float length;    // in meters
+    float height;    // in meters
+    float width;     // in meters
+    bool isSpecial;  // special vehicle flag
+
+    enum class VehicleType {
         REGULAR,
         OVERSIZE_LOW,
         OVERSIZE_HIGH,
     } type;  // Type of the vehicle
 
-    // Methods for vehicle management
-    Vehicle(); // Default constructor
+    // Methods
+    Vehicle();              // Default constructor
+    ~Vehicle();             // Destructor
 
-    ~Vehicle(); // Destructor
+    void start();           // Start vehicle
+    void stop();            // Stop vehicle
+    void honk() const;      // Honk
 
-    void start(); // Method to start the vehicle
-
-    void stop(); // Method to stop the vehicle
-
-    void honk() const; // Method to honk the horn
-
-    bool isDuplicateVehicle(const std::string& plate) const; // Check for duplicate vehicle
-
-    void saveVehicles() const; // Save vehicle data
-
-    void loadVehicles(); // Load vehicle data
+    bool isDuplicateVehicle(const char* plate) const;
 };
 
 #endif // VEHICLE_H
