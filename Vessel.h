@@ -1,3 +1,15 @@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// File: vessel.h
+// Title: Vessel Class Interface
+// Purpose: 
+//   Declares the Vessel class and its associated functions, including
+//   file-based save/load methods, sailing management, and vessel capacity info.
+//   Supports binary file persistence using fixed-length records.
+//
+// Version History:
+//   v1.0  (2025-07-24)  Initial creation and interface design for Vessel module.
+//                       Includes save/load operations and sailing container.
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #ifndef VESSEL_H
 #define VESSEL_H
 
