@@ -1,3 +1,15 @@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// File: reservation.h
+// Title: Reservation Class Interface
+// Purpose:
+//   Declares the Reservation class and its key operations, including
+//   reservation creation, lookup, and file persistence.
+//   Integrates with Vehicle and Sailing modules to manage booking logic.
+//
+// Version History:
+//   v1.0  (2025-07-8)  Initial creation of Reservation class interface.
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 #ifndef RESERVATION_H
 #define RESERVATION_H
 
