@@ -4,30 +4,30 @@
 #include "Sailing.h"
 #include <vector>
 #include <cstring>
+#include <string>
+#include <fstream>
 
 class Vessel {
 public:
-    int vesselID;                 // Unique identifier
-    char vesselName[32];          // Fixed-length name
-    float HCLL;                   // High ceiling lane length
-    float LCLL;                   // Low ceiling lane length
+    int vesselID;
+    char vesselName[32]; 
+    float HCLL;
+    float LCLL;
 
-    std::vector<Sailing> sailings; // This is kept in memory; NOT written directly to binary
+    std::vector<Sailing> sailings; 
 
-    // Constructors
-    Vessel();  // Default
+    Vessel();  
     Vessel(int id, const std::string& name, float hcll, float lcll);
-
-    // Destructor
     ~Vessel();
 
-    // Methods
     void addSailing(const Sailing& sailing);
     void removeSailing(const Sailing& sailing);
     void viewVesselDetails() const;
 
-    void load(std::ifstream& file);      // Load from binary file
-    void save(std::ofstream& file) const; // Save to binary file
+    static void loadAll(std::vector<Vessel>& vessels);
+    static void saveAll(const std::vector<Vessel>& vessels);
+
+    static void closeFile(); 
 };
 
 #endif // VESSEL_H

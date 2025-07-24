@@ -2,8 +2,12 @@
 #define SAILING_H
 
 #include "Reservation.h"
+#include <vector>
+
+class Vessel;
 
 const int MAX_RESERVATIONS = 100;
+const int SAILING_ID_LEN = 10; // 9 chars + null terminator
 
 struct date {
     int day;
@@ -17,29 +21,31 @@ struct date {
 
 class Sailing {
 public:
-    int sailingID;
+    char sailingID[SAILING_ID_LEN];
     date departureDate;
     int vesselID;  // ID of the vessel this sailing belongs to
     float HRL;  // High-ceiling remaining lane length
     float LRL;  // Low-ceiling remaining lane length
 
     Reservation reservations[MAX_RESERVATIONS];
-    int reservationCount;  // how many reservations are stored
+    int reservationCount = 0;  // how many reservations are stored
 
     // Constructors
     Sailing();
-    Sailing(int id, const date& depDate, float hrl, float lrl);
+    Sailing(char* sailingID, const date& depDate, float hrl, float lrl);
+    ~Sailing();
 
     // Methods
     void viewSailingDetails() const;
     void checkAvailability() const;
     bool makeReservation(const Reservation& res);
     bool cancelReservation(const char* reservationID);
-    char* generateReservationID() const;    
+    char* generateReservationID(); //  sailingID "-" reservationCount
     const Reservation* getReservation(const char* reservationID) const;
+    bool operator==(const Sailing& other) const;
 
-    void writeToFile(std::ofstream& out) const;
-    void readFromFile(std::ifstream& in);
+    static void saveAll(const std::vector<Vessel>& vessels);
+    static void loadAll(std::vector<Vessel>& vessels);
 };
 
 #endif // SAILING_H

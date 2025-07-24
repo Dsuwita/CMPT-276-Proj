@@ -17,11 +17,12 @@
 #include <fcntl.h>          // for open()
 
 static constexpr int NAME_SIZE = 100;
+
 struct VesselRecord {
-    int   vesselID;
-    char  vesselName[NAME_SIZE];
-    float HCLL;
-    float LCLL;
+    int vesselID;
+    char vesselName[NAME_SIZE];
+    float HCLL;  // High Ceiling Remaining Lane Length
+    float LCLL;  // Low Ceiling Remaining Lane Length
 };
 
 static std::fstream vesselFile;
@@ -49,8 +50,11 @@ Vessel::Vessel()
 
 Vessel::Vessel(int id, const std::string& name,
                float hcll, float lcll)
-  : vesselID(id), vesselName(name),
-    HCLL(hcll), LCLL(lcll) {}
+  : vesselID(id), HCLL(hcll), LCLL(lcll) {
+    std::strncpy(vesselName, name.c_str(), sizeof(vesselName));
+    vesselName[sizeof(vesselName) - 1] = '\0';
+}
+
 
 
 Vessel::~Vessel() {
@@ -79,47 +83,37 @@ void Vessel::viewVesselDetails() const {
     }
 }
 
-void Vessel::load() {
+void Vessel::loadAll(std::vector<Vessel>& vessels) {
     ensureVesselFileOpen();
+    vessels.clear();
     VesselRecord rec;
     vesselFile.seekg(0, std::ios::beg);
+
     while (vesselFile.read(reinterpret_cast<char*>(&rec), sizeof(rec))) {
-        if (rec.vesselID == vesselID) {
-            vesselName = std::string(rec.vesselName);
-            HCLL = rec.HCLL;
-            LCLL = rec.LCLL;
-            return;
-        }
+        Vessel v;
+        v.vesselID = rec.vesselID;
+        std::strncpy(v.vesselName, rec.vesselName, sizeof(v.vesselName));
+        v.vesselName[sizeof(v.vesselName) - 1] = '\0';
+        v.HCLL = rec.HCLL;
+        v.LCLL = rec.LCLL;
+        vessels.push_back(v);
     }
 }
 
-void Vessel::save() const {
+void Vessel::saveAll(const std::vector<Vessel>& vessels) {
     ensureVesselFileOpen();
-    VesselRecord rec{};
-    rec.vesselID = vesselID;
-    std::strncpy(rec.vesselName, vesselName.c_str(), NAME_SIZE);
-    rec.HCLL = HCLL;
-    rec.LCLL = LCLL;
-
-    vesselFile.seekg(0, std::ios::beg);
-    std::streampos pos;
-    bool found = false;
-    while (vesselFile.read(reinterpret_cast<char*>(&rec), sizeof(rec))) {
-        if (rec.vesselID == vesselID) {
-            found = true;
-            pos = vesselFile.tellg() - std::streamoff(sizeof(rec));
-            break;
-        }
+    vesselFile.close();
+    vesselFile.open("vessels.dat", std::ios::out | std::ios::binary | std::ios::trunc); // Clear file
+    for (const auto& v : vessels) {
+        VesselRecord rec;
+        rec.vesselID = v.vesselID;
+        std::strncpy(rec.vesselName, v.vesselName, NAME_SIZE);
+        rec.HCLL = v.HCLL;
+        rec.LCLL = v.LCLL;
+        vesselFile.write(reinterpret_cast<const char*>(&rec), sizeof(rec));
     }
-
-    if (found) {
-        vesselFile.seekp(pos);
-    } else {
-        vesselFile.clear();
-        vesselFile.seekp(0, std::ios::end);
-    }
-    vesselFile.write(reinterpret_cast<const char*>(&rec), sizeof(rec));
 }
+
 
 void Vessel::closeFile() {
     if (vesselFileOpen) {

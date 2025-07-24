@@ -13,7 +13,6 @@ public:
     char licensePlate[LICENSE_PLATE_LEN]; // Fixed-length license plate
     float length;    // in meters
     float height;    // in meters
-    float width;     // in meters
     bool isSpecial;  // special vehicle flag
 
     enum class VehicleType {
@@ -25,12 +24,6 @@ public:
     // Methods
     Vehicle();              // Default constructor
     ~Vehicle();             // Destructor
-
-    void start();           // Start vehicle
-    void stop();            // Stop vehicle
-    void honk() const;      // Honk
-
-    bool isDuplicateVehicle(const char* plate) const;
 };
 
 #endif // VEHICLE_H

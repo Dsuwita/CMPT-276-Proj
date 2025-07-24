@@ -2,15 +2,21 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <vector>
+#include <algorithm>
+
+#include "Vessel.h"
 
 // Default constructor
 Sailing::Sailing()
-    : sailingID(0), departureDate(), HRL(0.0f), LRL(0.0f), reservationCount(0) {
+    : sailingID(), departureDate(), HRL(0.0f), LRL(0.0f), reservationCount(0) {
 }
 
 // Parameterized constructor
-Sailing::Sailing(int id, const date& depDate, float hrl, float lrl)
-    : sailingID(id), departureDate(depDate), HRL(hrl), LRL(lrl), reservationCount(0) {
+Sailing::Sailing(char* id, const date& depDate, float hrl, float lrl)
+    : departureDate(depDate), HRL(hrl), LRL(lrl), reservationCount(0) {
+    strncpy(sailingID, id, sizeof(sailingID) - 1);
+    sailingID[sizeof(sailingID) - 1] = '\0';
 }
 
 // Destructor
@@ -88,12 +94,67 @@ const Reservation* Sailing::getReservation(const char* id) const {
     return nullptr;
 }
 
-// Write entire struct to binary file
-void Sailing::writeToFile(std::ofstream& out) const {
-    out.write(reinterpret_cast<const char*>(this), sizeof(Sailing));
+bool Sailing::operator==(const Sailing& other) const {
+    return std::strncmp(this->sailingID, other.sailingID, 9) == 0;  // or 10 if null-terminated
 }
 
-// Read entire struct from binary file
-void Sailing::readFromFile(std::ifstream& in) {
-    in.read(reinterpret_cast<char*>(this), sizeof(Sailing));
+char* Sailing::generateReservationID(){
+    static char result[13]; // 9-char sailingID + 3-char count = 12 + '\0'
+    std::snprintf(result, sizeof(result), "%s%03d", sailingID, reservationCount + 1);
+    result[12] = '\0'; 
+    reservationCount++; 
+    return result;
+}
+
+struct SailingRecord {
+    char sailingID[SAILING_ID_LEN];
+    int vesselID;
+    int day, month, year, hour;
+    float HRL;
+    float LRL;
+};
+
+void Sailing::saveAll(const std::vector<Vessel>& vessels) {
+    std::ofstream out("sailings.dat", std::ios::binary | std::ios::trunc);
+    if (!out) return;
+
+    for (const auto& v : vessels) {
+        for (const auto& s : v.sailings) {
+            SailingRecord rec{};
+            std::strncpy(rec.sailingID, s.sailingID, SAILING_ID_LEN);
+            rec.vesselID = v.vesselID;
+            rec.day = s.departureDate.day;
+            rec.month = s.departureDate.month;
+            rec.year = s.departureDate.year;
+            rec.hour = s.departureDate.hour;
+            rec.HRL = s.HRL;
+            rec.LRL = s.LRL;
+            out.write(reinterpret_cast<const char*>(&rec), sizeof(rec));
+        }
+    }
+}
+
+void Sailing::loadAll(std::vector<Vessel>& vessels) {
+    std::ifstream in("sailings.dat", std::ios::binary);
+    if (!in) return;
+
+    SailingRecord rec;
+    while (in.read(reinterpret_cast<char*>(&rec), sizeof(rec))) {
+        Sailing s;
+        std::strncpy(s.sailingID, rec.sailingID, SAILING_ID_LEN);
+        s.sailingID[SAILING_ID_LEN - 1] = '\0';
+        s.departureDate = date(rec.day, rec.month, rec.year, rec.hour);
+        s.HRL = rec.HRL;
+        s.LRL = rec.LRL;
+        s.vesselID = rec.vesselID;
+
+        // Find vessel by ID and add sailing
+        auto it = std::find_if(vessels.begin(), vessels.end(), [rec](const Vessel& v) {
+            return v.vesselID == rec.vesselID;
+        });
+
+        if (it != vessels.end()) {
+            it->addSailing(s);
+        }
+    }
 }

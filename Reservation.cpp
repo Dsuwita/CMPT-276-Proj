@@ -11,6 +11,9 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <vector>
+
+#include "Vessel.h"
 
 // Default constructor
 Reservation::Reservation() {
@@ -36,7 +39,7 @@ void Reservation::viewReservation() const {
     std::cout << "Reservation ID: " << reservationID << "\n";
     std::cout << "Phone Number: " << phoneNumber << "\n";
     std::cout << "Boarded: " << (isBoarded ? "Yes" : "No") << "\n";
-    vehicle.viewVehicle(); 
+    
 }
 
 // Check in reservation
@@ -54,17 +57,78 @@ bool Reservation::isAlreadyCheckedIn() const {
     return isBoarded;
 }
 
-// Binary file write
-void Reservation::writeToFile(std::ofstream& out) const {
-    out.write(reinterpret_cast<const char*>(this), sizeof(Reservation));
-}
-
-// Binary file read
-void Reservation::readFromFile(std::ifstream& in) {
-    in.read(reinterpret_cast<char*>(this), sizeof(Reservation));
-}
-
 // Match reservation ID (utility method)
 bool Reservation::matchesID(const char* id) const {
     return std::strncmp(reservationID, id, sizeof(reservationID)) == 0;
+}
+
+
+
+struct ReservationRecord {
+    char reservationID[RES_ID_LEN];
+    char phoneNumber[PHONE_SIZE];
+    char sailingID[SAILING_ID_LEN];
+    char licensePlate[PLATE_SIZE];
+    float length;
+    float height;
+    bool isSpecial;
+    int type;
+    bool isBoarded;
+};
+
+void Reservation::saveAll(const std::vector<Vessel>& vessels) {
+    std::ofstream out("reservations.dat", std::ios::binary | std::ios::trunc);
+    if (!out) return;
+
+    for (const auto& vessel : vessels) {
+        for (const auto& sailing : vessel.sailings) {
+            for (const auto& r : sailing.reservations) {
+                ReservationRecord rec{};
+                std::strncpy(rec.reservationID, r.reservationID, RES_ID_LEN);
+                std::strncpy(rec.sailingID, sailing.sailingID, SAILING_ID_LEN);
+
+                std::strncpy(rec.licensePlate, r.vehicle.licensePlate, PLATE_SIZE);
+                rec.length = r.vehicle.length;
+                rec.height = r.vehicle.height;
+                rec.isSpecial = r.vehicle.isSpecial;
+                rec.type = static_cast<int>(r.vehicle.type);
+
+                std::strncpy(rec.phoneNumber, r.phoneNumber, PHONE_SIZE);
+                rec.isBoarded = r.isBoarded;
+
+                out.write(reinterpret_cast<const char*>(&rec), sizeof(rec));
+            }
+        }
+    }
+}
+
+void Reservation::loadAll(std::vector<Vessel>& vessels) {
+    std::ifstream in("reservations.dat", std::ios::binary);
+    if (!in) return;
+
+    ReservationRecord rec;
+    while (in.read(reinterpret_cast<char*>(&rec), sizeof(rec))) {
+        Reservation res;
+        std::strncpy(res.reservationID, rec.reservationID, RES_ID_LEN);
+        std::strncpy(res.phoneNumber, rec.phoneNumber, PHONE_SIZE);
+        res.isBoarded = rec.isBoarded;
+
+        Vehicle veh;
+        std::strncpy(veh.licensePlate, rec.licensePlate, PLATE_SIZE);
+        veh.length = rec.length;
+        veh.height = rec.height;
+        veh.isSpecial = rec.isSpecial;
+        veh.type = static_cast<Vehicle::VehicleType>(rec.type);
+
+        res.vehicle = veh;
+
+        for (auto& vessel : vessels) {
+            for (auto& sailing : vessel.sailings) {
+                if (std::strncmp(sailing.sailingID, rec.sailingID, SAILING_ID_LEN) == 0) {
+                    sailing.reservations[sailing.reservationCount++] = res;
+                    break;
+                }
+            }
+        }
+    }
 }
