@@ -1,4 +1,4 @@
-/*
+/* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
  * File:        Vessel.cpp
  * Description: Implements the Vessel module. A Vessel contains identifying information
  *              and a list of Sailings. Responsible for managing its own sailings and
@@ -7,6 +7,7 @@
  *
  * Version History:'
  * *  v1.0 (2025-07-24) — initial implementation
+ * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
  */
 
 #include "Vessel.h"        

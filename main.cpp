@@ -1,4 +1,4 @@
-/*
+/* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
  * File:        main.cpp
  * Description: Main entry point for the Vessel Management System. Provides a user interface
  *              for managing vessels, sailings, and reservations. Implements a menu-driven
@@ -7,7 +7,7 @@
  *
  * Version History:
  * *  v1.0 (2025-07-24) — initial implementation
- */
+ * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@/
 
 #include <iostream>
 #include <algorithm>
