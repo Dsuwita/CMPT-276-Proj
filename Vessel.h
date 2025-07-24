@@ -7,7 +7,7 @@
 //   Supports binary file persistence using fixed-length records.
 //
 // Version History:
-//   v1.0  (2025-07-24)  Initial creation and interface design for Vessel module.
+//   v1.0  (2025-07-8)  Initial creation and interface design for Vessel module.
 //                       Includes save/load operations and sailing container.
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #ifndef VESSEL_H
