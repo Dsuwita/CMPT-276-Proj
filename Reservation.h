@@ -16,10 +16,6 @@ public:
 
     ~Reservation(); // Destructor
 
-    void makeReservation(); // Method to make a reservation
-
-    void cancelReservation(); // Method to cancel a reservation
-
     void viewReservation() const; // Method to view reservation details
 
     void checkInReservation(); // Method to check in a reservation

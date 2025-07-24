@@ -34,6 +34,8 @@ public:
     ~Sailing(); // Destructor
     void viewSailingDetails() const; // Method to view sailing details
     void checkAvailability() const; // Method to check availability of the sailing
+    void makeReservation(const Reservation& res); // Method to make a reservation
+    void cancelReservation(); // Method to cancel a reservation
     void getReservation(int reservationID) const; // Method to get a reservation by ID
     void load(); // Method to load sailings from a file
     void save() const; // Method to save sailings to a file
