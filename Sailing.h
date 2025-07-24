@@ -1,3 +1,15 @@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// File: sailing.h
+// Title: Sailing Class Interface
+// Purpose:
+//   Declares the Sailing class and related data structures, including
+//   sail date/time, destination, and capacity tracking.
+//   Intended for use with vessel assignments and reservation linkage.
+//
+// Version History:
+//   v1.0  (2025-07-8)  Initial interface definition for Sailing module.
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 #ifndef SAILING_H
 #define SAILING_H
 
