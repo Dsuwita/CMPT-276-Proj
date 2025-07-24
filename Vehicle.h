@@ -1,3 +1,15 @@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// File: vehicle.h
+// Title: Vehicle Class Interface
+// Purpose: 
+//   Declares the Vehicle class and its supporting functions for vehicle
+//   creation, classification, dimension tracking, and binary file I/O.
+//   Also includes logic to detect duplicate vehicle entries.
+//
+// Version History:
+//   v1.0  (2025-07-8)  Initial interface for Vehicle data and file operations.
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
