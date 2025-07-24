@@ -7,6 +7,8 @@
 #include <string>
 #include <fstream>
 
+static const int NAME_SIZE = 100;
+
 struct VesselRecord {
     int vesselID;
     char vesselName[NAME_SIZE];

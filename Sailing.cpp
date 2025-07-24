@@ -5,6 +5,7 @@
  * Author:      Team 21
  *
  * Version History:
+ *  v1.0 (2025-07-24) — initial implementation
  */
 
 #include "Sailing.h"
@@ -114,14 +115,6 @@ char* Sailing::generateReservationID(){
     reservationCount++; 
     return result;
 }
-
-struct SailingRecord {
-    char sailingID[SAILING_ID_LEN];
-    int vesselID;
-    int day, month, year, hour;
-    float HRL;
-    float LRL;
-};
 
 void Sailing::saveAll(const std::vector<Vessel>& vessels) {
     std::ofstream out("sailings.dat", std::ios::binary | std::ios::trunc);

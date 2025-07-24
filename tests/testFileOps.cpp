@@ -1,13 +1,13 @@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // testFileOps.cpp — unit test for Vessel file I/O
 // Version History:
-//   v1.1 (2025‑07‑24) — adjusted to use VesselRecord for binary ops
+//   v1.1 (2025‑07‑24) — initial version
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 #include <iostream>
 #include <fstream>
-#include <cstdio>      // for std::remove
-#include "Vessel.h"    // your Vessel interface
+#include <cstdio>    
+#include "../Vessel.h"    
 
 int main() {
     // 1) Clean slate: remove any existing data file
@@ -22,8 +22,6 @@ int main() {
     Vessel::saveAll(vessels);
 
     // 3) Load them back into new objects
-    Vessel u1(1, "", 0, 0);
-    Vessel u2(2, "", 0, 0);
     std::vector<Vessel> newVessels;
     Vessel::loadAll(newVessels);
 

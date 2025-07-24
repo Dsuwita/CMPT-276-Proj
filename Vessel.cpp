@@ -17,8 +17,6 @@
 #include <unistd.h>         // for ftruncate()
 #include <fcntl.h>          // for open()
 
-static constexpr int NAME_SIZE = 100;
-
 static std::fstream vesselFile;
 static bool      vesselFileOpen = false;
 
@@ -40,18 +38,22 @@ static void ensureVesselFileOpen() {
 
 
 Vessel::Vessel()
-  : vesselID(0), vesselName(), HCLL(0.0f), LCLL(0.0f) {}
+  : vesselID(0), vesselName(), HCLL(0.0f), LCLL(0.0f) {
+    std::vector<Sailing> sailings; 
+  }
 
 Vessel::Vessel(int id, const std::string& name,
                float hcll, float lcll)
   : vesselID(id), HCLL(hcll), LCLL(lcll) {
     std::strncpy(vesselName, name.c_str(), sizeof(vesselName));
     vesselName[sizeof(vesselName) - 1] = '\0';
+    std::vector<Sailing> sailings; 
 }
 
 
 
 Vessel::~Vessel() {
+
 }
 
 
