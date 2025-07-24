@@ -2,7 +2,7 @@
 #define RESERVATION_H
 
 #include "Vehicle.h"
-#include "Sailing.h"
+
 class Reservation {
 public:
     // Attributes for reservation details
