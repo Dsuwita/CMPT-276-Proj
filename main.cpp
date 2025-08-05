@@ -7,7 +7,8 @@
  *
  * Version History:
  * *  v1.0 (2025-07-24) — initial implementation
- * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@/
+ * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ * */
 
 #include <iostream>
 #include <algorithm>
@@ -169,8 +170,6 @@ void makeReservation() {
     inputVehicle(vehicle);
 
     Reservation newReservation;
-    std::strncpy(newReservation.reservationID, reservationID, 12);
-    newReservation.reservationID[12] = '\0';
     std::strncpy(newReservation.phoneNumber, phoneNumber, 14);
     newReservation.phoneNumber[10] = '\0';
     newReservation.vehicle = vehicle;
@@ -182,7 +181,8 @@ void makeReservation() {
             if (std::strncmp(sailing.sailingID, sailingID, 10) == 0) {
                 std::string generatedID = sailing.generateReservationID();
                 std::strncpy(reservationID, generatedID.c_str(), 12);
-                reservationID[12] = '\0';
+                std::strncpy(newReservation.reservationID, reservationID, 12);
+                newReservation.reservationID[12] = '\0';
                 sailing.makeReservation(newReservation);
                 std::cout << "Reservation created successfully!\n";
                 found = true;
@@ -195,6 +195,8 @@ void makeReservation() {
     if (!found) {
         std::cout << "Sailing with ID " << sailingID << " not found.\n";
     }
+
+    std::cout << "Your reservation ID is " << reservationID << "\n";
 
     std::cout << "Press Enter to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');

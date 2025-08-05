@@ -41,6 +41,15 @@ void Sailing::viewSailingDetails() const {
     std::cout << "High Ceiling Remaining Lane: " << HRL << "\n";
     std::cout << "Low Ceiling Remaining Lane: " << LRL << "\n";
     std::cout << "Number of Reservations: " << reservationCount << "\n";
+
+    if (reservationCount > 0) {
+        std::cout << "Reservations:\n";
+        for (int i = 1; i < reservationCount; i++) {
+            reservations[i].viewReservation();
+        }
+    } else {
+        std::cout << "No reservations made yet.\n";
+    }
 }
 
 void Sailing::checkAvailability() const {
@@ -71,8 +80,9 @@ bool Sailing::makeReservation(const Reservation& res) {
         LRL -= res.vehicle.length;
     }
 
-    reservations[reservationCount++] = res;
-    std::cout << "Reservation added.\n";
+    reservations[reservationCount] = res;
+    reservationCount++;
+    std::cout << "Reservation added. " << reservationCount << " total reservations.\n";
     return true;
 }
 
