@@ -127,8 +127,8 @@ void Reservation::loadAll(std::vector<Vessel>& vessels) {
         for (auto& vessel : vessels) {
             for (auto& sailing : vessel.sailings) {
                 if (std::strncmp(sailing.sailingID, rec.sailingID, SAILING_ID_LEN) == 0) {
-                    // Only add if reservationID is not empty and we have space
-                    if (std::strlen(res.reservationID) > 0) {
+                    // Only add if liscense plate is not empty
+                    if (std::strlen(veh.licensePlate) > 0) {
                         sailing.reservations[sailing.reservationCount++] = res;
                     }
                     break;

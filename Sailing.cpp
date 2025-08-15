@@ -44,7 +44,7 @@ void Sailing::viewSailingDetails() const {
 
     if (reservationCount > 0) {
         std::cout << "Reservations:\n";
-        for (int i = 1; i < reservationCount; i++) {
+        for (int i = 0; i < reservationCount; i++) {
             reservations[i].viewReservation();
         }
     } else {
