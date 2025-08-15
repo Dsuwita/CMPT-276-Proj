@@ -145,7 +145,7 @@ void createSailing() {
         return v.vesselID == vesselID;
     });
 
-    Sailing newSailing(sailingID, depDate, it.->HCLL, it->LCLL);
+    Sailing newSailing(sailingID, depDate, it->HCLL, it->LCLL);
 
     if (it != vessels.end()) {
         it->addSailing(newSailing);
