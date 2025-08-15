@@ -49,12 +49,26 @@ void printMenu() {
 void inputVehicle(Vehicle& vehicle) {
     std::cout << "Enter license plate (max 9 characters): ";
     std::cin >> vehicle.licensePlate;
+    if (std::strlen(vehicle.licensePlate) > PLATE_SIZE - 1) {
+        std::cout << "License plate too long. Please enter a maximum of 9 characters.\n";
+        std::cout << "Press Enter to continue...";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return;
+    }
+
     std::cout << "Enter vehicle length: ";
     std::cin >> vehicle.length;
     std::cout << "Enter vehicle height: ";
     std::cin >> vehicle.height;
     std::cout << "Is this a special vehicle? (1 for yes, 0 for no): ";
     std::cin >> vehicle.isSpecial;
+
+    if(vehicle.isSpecial != 0 && vehicle.isSpecial != 1) {
+        std::cout << "Invalid input for special vehicle. Please enter 1 for yes or 0 for no.\n";
+        std::cout << "Press Enter to continue...";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return;
+    }
 
     int type;
     std::cout << "Enter vehicle type (0 = REGULAR, 1 = OVERSIZE_LOW, 2 = OVERSIZE_HIGH): ";
@@ -160,10 +174,24 @@ void makeReservation() {
 
     std::cout << "Enter Phone Number: ";
     std::cin >> phoneNumber;
+
+    if (std::strlen(phoneNumber) > 10) {
+        std::cout << "Phone number too long. Please enter a maximum of 10 characters.\n";
+        std::cout << "Press Enter to continue...";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return;
+    }
     phoneNumber[10] = '\0'; 
 
     std::cout << "Enter Sailing ID (max 9 characters): ";
     std::cin >> sailingID;
+
+    if (std::strlen(sailingID) > 9) {
+        std::cout << "Sailing ID too long. Please enter a maximum of 9 characters.\n";
+        std::cout << "Press Enter to continue...";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return;
+    }
     sailingID[9] = '\0';
 
     std::cout << "Enter Vehicle Details:\n";
@@ -230,7 +258,7 @@ void cancelReservation() {
         }
     }
 
-    std::cout << "Sailing with ID " << sailingID << " not found.\n";
+    std::cout << "Sailing with ID " << sailingID << "or Reservation with ID" < reservationID << " not found.\n";
     std::cout << "Press Enter to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin.get();
@@ -241,6 +269,12 @@ void viewSailingReport() {
     char sailingID[10];
     std::cout << "Enter Sailing ID to view report (9 chars max): ";
     std::cin >> sailingID;
+    if (std::strlen(sailingID) > 9) {
+        std::cout << "Sailing ID too long. Please enter a maximum of 9 characters.\n";
+        std::cout << "Press Enter to continue...";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return;
+    }
     sailingID[9] = '\0';
 
     for (const auto& vessel : vessels) {
@@ -266,6 +300,13 @@ void checkInVehicle() {
     char reservationID[13];
     std::cout << "Enter Reservation ID (12 chars max): ";
     std::cin >> reservationID;
+    if (std::strlen(reservationID) > 12) {
+        std::cout << "Reservation ID too long. Please enter a maximum of 12 characters.\n";
+        std::cout << "Press Enter to continue...";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return;
+    }
+
     reservationID[12] = '\0';
 
     for (auto& vessel : vessels) {
