@@ -129,13 +129,6 @@ void createSailing() {
     std::cout << "Enter Departure Date (day month year hour): ";
     std::cin >> depDate.day >> depDate.month >> depDate.year >> depDate.hour;
 
-    std::cout << "Enter High Ceiling Remaining Lane (HRL): ";
-    std::cin >> hrl;
-    std::cout << "Enter Low Ceiling Remaining Lane (LRL): ";
-    std::cin >> lrl;
-
-    Sailing newSailing(sailingID, depDate, hrl, lrl);
-
     for (const auto& vessel : vessels) {
         for (const auto& sailing : vessel.sailings) {
             if (std::strncmp(sailing.sailingID, sailingID, 10) == 0) {
@@ -151,6 +144,8 @@ void createSailing() {
     auto it = std::find_if(vessels.begin(), vessels.end(), [vesselID](const Vessel& v) {
         return v.vesselID == vesselID;
     });
+
+    Sailing newSailing(sailingID, depDate, it.->HCLL, it->LCLL);
 
     if (it != vessels.end()) {
         it->addSailing(newSailing);
