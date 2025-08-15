@@ -253,7 +253,7 @@ void cancelReservation() {
         }
     }
 
-    std::cout << "Sailing with ID " << sailingID << "or Reservation with ID" < reservationID << " not found.\n";
+    std::cout << "Sailing with ID " << sailingID << "or Reservation with ID" << reservationID << " not found.\n";
     std::cout << "Press Enter to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cin.get();

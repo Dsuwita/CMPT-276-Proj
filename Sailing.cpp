@@ -123,7 +123,6 @@ char* Sailing::generateReservationID(){
     static char result[13]; // 9-char sailingID + 3-char count = 12 + '\0'
     std::snprintf(result, sizeof(result), "%s%03d", sailingID, reservationCount + 1);
     result[12] = '\0'; 
-    reservationCount++; 
     return result;
 }
 
