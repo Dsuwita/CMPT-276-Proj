@@ -168,5 +168,13 @@ void Sailing::loadAll(std::vector<Vessel>& vessels) {
         if (it != vessels.end()) {
             it->addSailing(s);
         }
+
+        //make sure there are no empty reservations added
+        s.reservationCount = 0; // Reset count for new sailings
+
+        for (int i = 0; i < MAX_RESERVATIONS; ++i) {
+            s.reservations[i] = Reservation(); // Initialize empty reservations
+        }
+
     }
 }
